@@ -1,8 +1,15 @@
 <?php
 session_start();
-$databasePath = __DIR__ . '/sqlite.db';
-$conn = new PDO("sqlite:" . $databasePath);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$databaseHost = 'localhost';
+$databaseName = 'timetracker';
+$databaseUser = 'root';
+$databasePassword = 'root';
+
+$conn = new mysqli($databaseHost, $databaseUser, $databasePassword, $databaseName);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $start_time = $_POST['start_time'];
@@ -15,12 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $duration_seconds = $end - $start;
             $duration = gmdate("H:i:s", $duration_seconds);
 
-            $sql = "INSERT INTO time_logs (user_id, start_time, end_time, duration) VALUES (1, :start_time, :end_time, :duration)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':start_time', $start_time);
-            $stmt->bindValue(':end_time', $end_time);
-            $stmt->bindValue(':duration', $duration);
+            $stmt = $conn->prepare("INSERT INTO time_logs (user_id, start_time, end_time, duration) VALUES (1, ?, ?, ?)");
+            $stmt->bind_param("sss", $start_time, $end_time, $duration);
             $stmt->execute();
+            $stmt->close();
         } else {
             echo "<p style='color:red;'>Start time must be before end time.</p>";
         }
@@ -36,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <script>
         function validateForm() {
             const start_time = document.getElementById('start_time').value;
@@ -75,13 +80,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </tr>
     <?php
     $result = $conn->query("SELECT start_time, end_time, duration FROM time_logs WHERE user_id = 1 ORDER BY start_time DESC");
-    foreach ($result as $row) {
+    while ($row = $result->fetch_assoc()) {
         echo "<tr>
                 <td>{$row['start_time']}</td>
                 <td>{$row['end_time']}</td>
                 <td>{$row['duration']}</td>
               </tr>";
     }
+    $result->free();
+    $conn->close();
     ?>
 </table>
 
