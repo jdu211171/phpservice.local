@@ -29,27 +29,40 @@ if (isset($_GET['id'])) {
 ?>
 <?= template_header('Read') ?>
 
-<div class="content update">
-    <h2>Update Contact #<?= $contact['id'] ?></h2>
+<div class="container mt-4 pb-4">
+    <h2 class="border-bottom pb-2 mb-4">Update Contact</h2>
     <form action="update.php?id=<?= $contact['id'] ?>" method="post">
-        <label for="id">ID</label>
-        <label for="name">Name</label>
-        <input type="text" name="id" placeholder="1" value="<?= $contact['id'] ?>" id="id">
-        <input type="text" name="name" placeholder="John Doe" value="<?= $contact['name'] ?>" id="name">
-        <label for="email">Email</label>
-        <label for="phone">Phone</label>
-        <input type="text" name="email" placeholder="johndoe@example.com" value="<?= $contact['email'] ?>" id="email">
-        <input type="text" name="phone" placeholder="2025550143" value="<?= $contact['phone'] ?>" id="phone">
-        <label for="title">Title</label>
-        <label for="created">Created</label>
-        <input type="text" name="title" placeholder="Employee" value="<?= $contact['title'] ?>" id="title">
-        <input type="datetime-local" name="created" value="<?= date('Y-m-d\TH:i', strtotime($contact['created'])) ?>"
-               id="created">
-        <input type="submit" value="Update">
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" name="id" placeholder="1" value="<?= $contact['id'] ?>" id="id">
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" placeholder="John Doe" value="<?= $contact['name'] ?>"
+                   id="name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" placeholder="johndoe@example.com"
+                   value="<?= $contact['email'] ?>" id="email">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" name="phone" placeholder="2025550143"
+                   value="<?= $contact['phone'] ?>" id="phone">
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" name="title" placeholder="Employee" value="<?= $contact['title'] ?>"
+                   id="title">
+        </div>
+        <div class="form-group">
+            <label for="created">Created</label>
+            <input type="datetime-local" class="form-control" name="created"
+                   value="<?= date('Y-m-d\TH:i', strtotime($contact['created'])) ?>" id="created">
+        </div>
+        <button type="submit" class="btn btn-success">Update</button>
     </form>
-    <?php if ($msg): ?>
-        <p><?= $msg ?></p>
-    <?php endif; ?>
 </div>
 
 <?= template_footer() ?>

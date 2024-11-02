@@ -15,29 +15,39 @@ function pdo_connect_mysql()
 
 function template_header($title)
 {
-    echo <<<EOT
+    return <<<EOT
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>$title</title>
-		<link href="style.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	</head>
-	<body>
-    <nav class="navtop">
-    	<div>
-    		<h1>Website Title</h1>
-            <a href="index.php"><i class="fas fa-home"></i>Home</a>
-    		<a href="read.php"><i class="fas fa-address-book"></i>Contacts</a>
-    	</div>
-    </nav>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Manager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
+<body class="bg-white">
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3f69a8;">
+    <div class="container">
+        <a class="navbar-brand" href="#">Website Title</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="read.php"><i class="fas fa-address-book"></i> Contacts</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 EOT;
 }
 
 function template_footer()
 {
-    echo <<<EOT
+    return <<<EOT
     </body>
 </html>
 EOT;

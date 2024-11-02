@@ -12,19 +12,19 @@ $num_contacts = $pdo->query('SELECT COUNT(*) FROM contacts')->fetchColumn();
 ?>
 <?php echo template_header('Read') ?>
 
-    <div class="content read">
-        <h2>Read Contacts</h2>
-        <a href="create.php" class="create-contact">Create Contact</a>
-        <table>
-            <thead>
+    <div class="container mt-4">
+        <h2 class="border-bottom pb-2 mb-4">Read Contacts</h2>
+        <a href="create.php" class="btn btn-success mb-3">Create Contact</a>
+        <table class="table table-striped">
+            <thead class="thead-light">
             <tr>
-                <td>#</td>
-                <td>Name</td>
-                <td>Email</td>
-                <td>Phone</td>
-                <td>Title</td>
-                <td>Created</td>
-                <td></td>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Title</th>
+                <th>Created</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -39,21 +39,26 @@ $num_contacts = $pdo->query('SELECT COUNT(*) FROM contacts')->fetchColumn();
                     <td class="actions">
                         <a href="update.php?id=<?php echo $contact['id'] ?>" class="edit"><i
                                     class="fas fa-pen fa-xs"></i></a>
-                        <a href="delete.php?id=<?php echo $contact['id'] ?>" class="trash"><i
+                        <a href="delete.php?id=<?php echo $contact['id'] ?>" class="trash" style="color:red"><i
                                     class="fas fa-trash fa-xs"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
-        <div class="pagination">
-            <?php if ($page > 1): ?>
-                <a href="read.php?page=<?php echo $page - 1 ?>"><i class="fas fa-angle-double-left fa-sm"></i></a>
-            <?php endif; ?>
-            <?php if ($page * $records_per_page < $num_contacts): ?>
-                <a href="read.php?page=<?php echo $page + 1 ?>"><i class="fas fa-angle-double-right fa-sm"></i></a>
-            <?php endif; ?>
-        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item <?php if ($page <= 1) echo 'disabled'; ?>">
+                    <a class="page-link" href="<?php if ($page > 1) echo 'read.php?page=' . ($page - 1); ?>" tabindex="-1" aria-disabled="<?php if ($page <= 1) echo 'true'; ?>">Previous</a>
+                </li>
+                <?php for ($i = 1; $i <= ceil($num_contacts / $records_per_page); $i++): ?>
+                    <li class="page-item <?php if ($page == $i) echo 'active'; ?>"><a class="page-link" href="read.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                <?php endfor; ?>
+                <li class="page-item <?php if ($page * $records_per_page >= $num_contacts) echo 'disabled'; ?>">
+                    <a class="page-link" href="<?php if ($page * $records_per_page < $num_contacts) echo 'read.php?page=' . ($page + 1); ?>">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
 <?php echo template_footer() ?>

@@ -7,8 +7,8 @@ include 'functions.php';
 
 <?= template_header('Home') ?>
 
-    <div class="content">
-        <h2>Home</h2>
+    <div class="container mt-4">
+        <h2 class="border-bottom pb-2 mb-4">Home</h2>
         <p>Welcome to the home page!</p>
     </div>
 

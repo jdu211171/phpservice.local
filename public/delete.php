@@ -27,17 +27,13 @@ if (isset($_GET['id'])) {
 ?>
 <?= template_header('Delete') ?>
 
-<div class="content delete">
-    <h2>Delete Contact #<?= $contact['id'] ?></h2>
-    <?php if ($msg): ?>
-        <p><?= $msg ?></p>
-    <?php else: ?>
-        <p>Are you sure you want to delete contact #<?= $contact['id'] ?>?</p>
-        <div class="yesno">
-            <a href="delete.php?id=<?= $contact['id'] ?>&confirm=yes">Yes</a>
-            <a href="delete.php?id=<?= $contact['id'] ?>&confirm=no">No</a>
-        </div>
-    <?php endif; ?>
+<div class="container mt-4">
+    <h2 class="border-bottom pb-2 mb-4">Delete Contact</h2>
+    <p>Are you sure you want to delete contact #<?= $contact['id'] ?>?</p>
+    <div class="d-flex">
+        <a href="delete.php?id=<?= $contact['id'] ?>&confirm=yes" class="btn btn-danger mr-2">Yes</a>
+        <a href="delete.php?id=<?= $contact['id'] ?>&confirm=no" class="btn btn-secondary">No</a>
+    </div>
 </div>
 
 <?= template_footer() ?>
