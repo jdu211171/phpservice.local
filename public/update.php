@@ -15,6 +15,11 @@ if (!$id) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contactObj->update($id, $_POST);
+    if (!empty($_POST['started_at']) && !empty($_POST['ended_at'])) {
+        $contactObj->updateWorkTime($id, $_POST['started_at'], $_POST['ended_at']);
+    } else {
+        $contactObj->updateRequiredWorkTime($id);
+    }
     header('Location: read.php');
     exit;
 }
@@ -32,30 +37,31 @@ echo Template::header('Update');
         <form action="update.php?id=<?= $contact['id'] ?>" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" name="name" placeholder="John Doe"
-                       value="<?= $contact['name'] ?>"
-                       id="name">
+                <input type="text" class="form-control" name="name" placeholder="John Doe" value="<?= $contact['name'] ?>" id="name">
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" placeholder="johndoe@example.com"
-                       value="<?= $contact['email'] ?>" id="email">
+                <input type="email" class="form-control" name="email" placeholder="johndoe@example.com" value="<?= $contact['email'] ?>" id="email">
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input type="text" class="form-control" name="phone" placeholder="2025550143"
-                       value="<?= $contact['phone'] ?>" id="phone">
+                <input type="text" class="form-control" name="phone" placeholder="2025550143" value="<?= $contact['phone'] ?>" id="phone">
             </div>
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" placeholder="Employee"
-                       value="<?= $contact['title'] ?>"
-                       id="title">
+                <input type="text" class="form-control" name="title" placeholder="Employee" value="<?= $contact['title'] ?>" id="title">
             </div>
             <div class="form-group">
                 <label for="created">Created</label>
-                <input type="datetime-local" class="form-control" name="created"
-                       value="<?= date('Y-m-d\TH:i', strtotime($contact['created'])) ?>" id="created">
+                <input type="datetime-local" class="form-control" name="created" value="<?= date('Y-m-d\TH:i', strtotime($contact['created'])) ?>" id="created">
+            </div>
+            <div class="form-group">
+                <label for="started_at">Started At</label>
+                <input type="datetime-local" class="form-control" name="started_at" value="<?= $contact['started_at'] ?>" id="started_at">
+            </div>
+            <div class="form-group">
+                <label for="ended_at">Ended At</label>
+                <input type="datetime-local" class="form-control" name="ended_at" value="<?= $contact['ended_at'] ?>" id="ended_at">
             </div>
             <button type="submit" class="btn btn-success">Update</button>
         </form>

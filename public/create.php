@@ -37,8 +37,15 @@ echo Template::header('Create');
             </div>
             <div class="form-group">
                 <label for="created">Created</label>
-                <input type="datetime-local" class="form-control" name="created" value="<?= date('Y-m-d\TH:i') ?>"
-                       id="created">
+                <input type="datetime-local" class="form-control" name="created" value="<?= date('Y-m-d\TH:i') ?>" id="created">
+            </div>
+            <div class="form-group">
+                <label for="started_at">Started At</label>
+                <input type="datetime-local" class="form-control" name="started_at" id="started_at">
+            </div>
+            <div class="form-group">
+                <label for="ended_at">Ended At</label>
+                <input type="datetime-local" class="form-control" name="ended_at" id="ended_at">
             </div>
             <button type="submit" class="btn btn-success">Create</button>
         </form>

@@ -17,13 +17,14 @@ class Contact
 
     public function create($data): void
     {
-        $stmt = $this->pdo->prepare('INSERT INTO contacts (name, email, phone, title, created) VALUES (?, ?, ?, ?, ?)');
+        $stmt = $this->pdo->prepare('INSERT INTO contacts (name, email, phone, title, created, default_work_hours) VALUES (?, ?, ?, ?, ?, ?)');
         $stmt->execute([
             $data['name'],
             $data['email'],
             $data['phone'],
             $data['title'],
-            $data['created'] ?? date('Y-m-d H:i:s')
+            $data['created'] ?? date('Y-m-d H:i:s'),
+            $data['default_work_hours'] ?? 8
         ]);
     }
 
@@ -50,13 +51,18 @@ class Contact
 
     public function update($id, $data): void
     {
-        $stmt = $this->pdo->prepare('UPDATE contacts SET name = ?, email = ?, phone = ?, title = ?, created = ? WHERE id = ?');
+        $stmt = $this->pdo->prepare('UPDATE contacts SET name = ?, email = ?, phone = ?, title = ?, created = ?, started_at = ?, ended_at = ?, total_work_time = ?, required_work_time = ?, default_work_hours = ? WHERE id = ?');
         $stmt->execute([
             $data['name'],
             $data['email'],
             $data['phone'],
             $data['title'],
             $data['created'],
+            $data['started_at'],
+            $data['ended_at'],
+            $data['total_work_time'],
+            $data['required_work_time'],
+            $data['default_work_hours'],
             $id
         ]);
     }
@@ -65,5 +71,37 @@ class Contact
     {
         $stmt = $this->pdo->prepare('DELETE FROM contacts WHERE id = ?');
         $stmt->execute([$id]);
+    }
+
+    public function updateWorkTime($id, $started_at, $ended_at): void
+    {
+        $contact = $this->getById($id);
+        $work_time = (strtotime($ended_at) - strtotime($started_at)) / 3600; // Convert seconds to hours
+        $total_work_time = $contact['total_work_time'];
+        $required_work_time = $contact['required_work_time'];
+
+        if ($required_work_time > 0) {
+            if ($work_time >= $required_work_time) {
+                $work_time -= $required_work_time;
+                $required_work_time = 0;
+            } else {
+                $required_work_time -= $work_time;
+                $work_time = 0;
+            }
+        }
+
+        $total_work_time += $work_time;
+
+        $stmt = $this->pdo->prepare('UPDATE contacts SET total_work_time = ?, required_work_time = ?, started_at = ?, ended_at = ? WHERE id = ?');
+        $stmt->execute([$total_work_time, $required_work_time, $started_at, $ended_at, $id]);
+    }
+
+    public function updateRequiredWorkTime($id): void
+    {
+        $contact = $this->getById($id);
+        $required_work_time = $contact['required_work_time'] + $contact['default_work_hours'];
+
+        $stmt = $this->pdo->prepare('UPDATE contacts SET required_work_time = ? WHERE id = ?');
+        $stmt->execute([$required_work_time, $id]);
     }
 }
